@@ -28,11 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Update Calendar
  *
- * @param stdclass|stdobject $wespher wespher
- * @param int $cmid cmid
+ * @param stdClass|stdobject $wespher wespher
+ * @param stdClass|stdobject $cmid cmid
  * @return bool result true
  */
-function wespher_update_calendar(stdClass $wespher, $cmid) {
+function wespher_update_calendar($wespher, $cmid) {
     global $DB, $CFG;
 
     require_once($CFG->dirroot . '/calendar/lib.php');

@@ -28,6 +28,12 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/lib/moodlelib.php');
 require_once(dirname(__FILE__) . '/lib.php');
 require_once($CFG->libdir . '/filelib.php');
 
+/**
+ * Encrypt data
+ *
+ * @param string $textoencrypt The textoencrypt
+ * @return string Return Encrypted msg
+ */
 function encrption_data($textoencrypt) {
 
     $encryptionmethod = "AES-256-CBC";

@@ -26,10 +26,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
-require_once(dirname(dirname(dirname(__FILE__))) . '/lib/moodlelib.php');
-require_once(dirname(__FILE__) . '/lib.php');
-require_once($CFG->libdir . '/filelib.php');
+require_once (dirname(dirname(dirname(__FILE__))) . '/config.php');
+require_once (dirname(dirname(dirname(__FILE__))) . '/lib/moodlelib.php');
+require_once (dirname(__FILE__) . '/lib.php');
+require_once ($CFG->libdir . '/filelib.php');
 
 $leeloolxplicense = get_config('mod_wespher')->license;
 $url = 'https://leeloolxp.com/api_moodle.php/?action=page_info';
@@ -74,6 +74,12 @@ if (!$output = $curl->post($url, $postdata, $options)) {
 $resposedata = json_decode($output);
 $settingleeloolxp = $resposedata->data->wespher_conference;
 
+/**
+ * Decrypt data
+ *
+ * @param string $encryptedmessage The encryptedmessage
+ * @return string Return Decrypted msg
+ */
 function deencrption_data($encryptedmessage) {
 
     $encryptionmethod = "AES-256-CBC";

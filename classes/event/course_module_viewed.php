@@ -47,6 +47,11 @@ class course_module_viewed extends \core\event\course_module_viewed {
 
     }
 
+    /**
+     * Get mapping
+     *
+     * @return array Return Encrypted msg
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'wespher', 'restore' => 'wespher');
     }

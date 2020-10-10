@@ -70,14 +70,14 @@ $urlparams = array('conferencename' => $wespher->name, 'courseid' => $course->id
 $today = getdate();
 
 if ($wespher->completed == 1) {
-    $recorded_urls = array_reverse(explode('|', $wespher->recordedurl));
+    $recordedurls = array_reverse(explode('|', $wespher->recordedurl));
 
-    foreach ($recorded_urls as $recorded_url) {
-        if ($recorded_url != '') {
-            echo '<video width="100%" controls><source src="' . $recorded_url . '" type="video/mp4">Your browser does not support HTML5 video.</video>';
+    foreach ($recordedurls as $recordedurl) {
+        if ($recordedurl != '') {
+            echo '<video width="100%" controls><source src="' . $recordedurl . '" type="video/mp4">Your browser does not support HTML5 video.</video>';
         }
     }
-} elseif ($today[0] > (($wespher->timeopen) - ($wespher->beforetime * 60))) {
+} else if ($today[0] > (($wespher->timeopen) - ($wespher->beforetime * 60))) {
 
     echo $OUTPUT->box(get_string('joinguide', 'wespher'));
     echo $OUTPUT->single_button(new moodle_url('/mod/wespher/conference.php', $urlparams), get_string('join', 'wespher'), 'get');

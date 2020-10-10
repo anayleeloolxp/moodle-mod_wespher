@@ -25,24 +25,37 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Support
+ *
+ * @param object $feature
+ * @return bool true
+ */
 function wespher_supports($feature) {
 
     switch ($feature) {
-    case FEATURE_MOD_INTRO:
-        return true;
-    case FEATURE_SHOW_DESCRIPTION:
-        return true;
-    case FEATURE_BACKUP_MOODLE2:
-        return false;
-    default:
-        return null;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return false;
+        default:
+            return null;
     }
 }
 
+/**
+ * Add Instance
+ *
+ * @param object $wespher The instance
+ * @param object $mform The mform
+ * @return int $id id
+ */
 function wespher_add_instance($wespher, $mform = null) {
 
     global $CFG, $DB;
-    require_once($CFG->dirroot . '/mod/wespher/locallib.php');
+    require_once ($CFG->dirroot . '/mod/wespher/locallib.php');
 
     $wespher->timecreated = time();
     $cmid = $wespher->coursemodule;
@@ -55,9 +68,16 @@ function wespher_add_instance($wespher, $mform = null) {
     return $wespher->id;
 }
 
+/**
+ * Update Instance
+ *
+ * @param object $wespher The instance
+ * @param object $mform The mform
+ * @return object $result result
+ */
 function wespher_update_instance($wespher, $mform = null) {
     global $CFG, $DB;
-    require_once($CFG->dirroot . '/mod/wespher/locallib.php');
+    require_once ($CFG->dirroot . '/mod/wespher/locallib.php');
 
     $wespher->timemodified = time();
     $wespher->id = $wespher->instance;
@@ -71,9 +91,17 @@ function wespher_update_instance($wespher, $mform = null) {
     return $result;
 }
 
+/**
+ * Refresh events
+ *
+ * @param int $courseid The page
+ * @param int $instance The course
+ * @param object $cm The course module
+ * @return bool $result true
+ */
 function wespher_refresh_events($courseid = 0, $instance = null, $cm = null) {
     global $CFG, $DB;
-    require_once($CFG->dirroot . '/mod/wespher/locallib.php');
+    require_once ($CFG->dirroot . '/mod/wespher/locallib.php');
 
     if (isset($instance)) {
         if (!is_object($instance)) {
@@ -109,6 +137,12 @@ function wespher_refresh_events($courseid = 0, $instance = null, $cm = null) {
     return true;
 }
 
+/**
+ * Delete instance
+ *
+ * @param string $id The page
+ * @return bool $result true
+ */
 function wespher_delete_instance($id) {
     global $CFG, $DB;
 
@@ -124,6 +158,15 @@ function wespher_delete_instance($id) {
 
     return $result;
 }
+
+/**
+ * Set View
+ *
+ * @param object $page The page
+ * @param object $course The course
+ * @param object $cm The course module
+ * @param object $context The context
+ */
 function weshper_view($page, $course, $cm, $context) {
 
     // Trigger course_module_viewed event.

@@ -25,6 +25,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Update Calendar
+ *
+ * @param stdclass|stdobject $wespher wesphe
+ * @param int $cmid cmid
+ * @return bool true
+ */
 function wespher_update_calendar(stdClass $wespher, $cmid) {
     global $DB, $CFG;
 

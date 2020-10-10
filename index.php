@@ -48,16 +48,16 @@ if (!$wesphers = get_all_instances_in_course('wespher', $course)) {
 
 $usesections = course_format_uses_sections($course->format);
 
-$html_table = new html_table();
-$html_table->attributes['class'] = 'generaltable mod_index';
+$htmltable = new html_table();
+$htmltable->attributes['class'] = 'generaltable mod_index';
 
 if ($usesections) {
     $strsectionname = get_string('sectionname', 'format_' . $course->format);
-    $html_table->head = array($strsectionname, $strname);
-    $html_table->align = array('center', 'left');
+    $htmltable->head = array($strsectionname, $strname);
+    $htmltable->align = array('center', 'left');
 } else {
-    $html_table->head = array($strname);
-    $html_table->align = array('left');
+    $htmltable->head = array($strname);
+    $htmltable->align = array('left');
 }
 
 $modinfo = get_fast_modinfo($course);
@@ -70,7 +70,7 @@ foreach ($modinfo->instances['wespher'] as $cm) {
                 $row[] = get_section_name($course, $cm->sectionnum);
             }
             if ($currentsection !== '') {
-                $html_table->data[] = 'hr';
+                $htmltable->data[] = 'hr';
             }
             $currentsection = $cm->sectionnum;
         }
@@ -80,9 +80,9 @@ foreach ($modinfo->instances['wespher'] as $cm) {
 
     $row[] = html_writer::link(new moodle_url('view.php', array('id' => $cm->id)), $cm->get_formatted_name(), $class);
 
-    $html_table->data[] = $row;
+    $htmltable->data[] = $row;
 }
 
-echo html_writer::table($html_table);
+echo html_writer::table($htmltable);
 
 echo $OUTPUT->footer();

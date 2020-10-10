@@ -24,8 +24,11 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once ($CFG->dirroot . '/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
+/**
+ * Form Class
+ */
 class mod_wespher_mod_form extends moodleform_mod {
 
     /**

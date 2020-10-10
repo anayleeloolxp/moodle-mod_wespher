@@ -55,7 +55,7 @@ function wespher_supports($feature) {
 function wespher_add_instance($wespher, $mform = null) {
 
     global $CFG, $DB;
-    require_once ($CFG->dirroot . '/mod/wespher/locallib.php');
+    require_once($CFG->dirroot . '/mod/wespher/locallib.php');
 
     $wespher->timecreated = time();
     $cmid = $wespher->coursemodule;
@@ -77,7 +77,7 @@ function wespher_add_instance($wespher, $mform = null) {
  */
 function wespher_update_instance($wespher, $mform = null) {
     global $CFG, $DB;
-    require_once ($CFG->dirroot . '/mod/wespher/locallib.php');
+    require_once($CFG->dirroot . '/mod/wespher/locallib.php');
 
     $wespher->timemodified = time();
     $wespher->id = $wespher->instance;
@@ -101,7 +101,7 @@ function wespher_update_instance($wespher, $mform = null) {
  */
 function wespher_refresh_events($courseid = 0, $instance = null, $cm = null) {
     global $CFG, $DB;
-    require_once ($CFG->dirroot . '/mod/wespher/locallib.php');
+    require_once($CFG->dirroot . '/mod/wespher/locallib.php');
 
     if (isset($instance)) {
         if (!is_object($instance)) {

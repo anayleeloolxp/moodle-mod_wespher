@@ -50,7 +50,7 @@ $curl = new curl;
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => count($postdata),
+    'CURLOPT_POST' => 1,
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {
@@ -74,7 +74,7 @@ $curl = new curl;
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => count($postdata),
+    'CURLOPT_POST' => 1,
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {

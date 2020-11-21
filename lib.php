@@ -167,7 +167,7 @@ function wespher_delete_instance($id) {
  * @param object $cm The course module
  * @param object $context The context
  */
-function weshper_view($page, $course, $cm, $context) {
+function wespher_view($page, $course, $cm, $context) {
 
     // Trigger course_module_viewed event.
     $params = array(
@@ -178,7 +178,7 @@ function weshper_view($page, $course, $cm, $context) {
     $event = \mod_wespher\event\course_module_viewed::create($params);
     $event->add_record_snapshot('course_modules', $cm);
     $event->add_record_snapshot('course', $course);
-    $event->add_record_snapshot('weshper', $page);
+    $event->add_record_snapshot('wespher', $page);
     $event->trigger();
 
     // Completion.

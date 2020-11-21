@@ -51,11 +51,13 @@ require_login($course, true, $cm);
 $PAGE->set_url('/mod/wespher/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($wespher->name));
 $PAGE->set_heading(format_string($course->fullname));
-echo $OUTPUT->header();
-echo $OUTPUT->heading($wespher->name);
+
 $context = context_module::instance($cm->id);
 
-weshper_view($wespher, $course, $cm, $context);
+wespher_view($wespher, $course, $cm, $context);
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading($wespher->name);
 
 if (!has_capability('mod/wespher:view', $context)) {
     notice(get_string('nopermissiontoview', 'wespher'));

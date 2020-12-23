@@ -62,6 +62,8 @@ function wespher_add_instance($wespher, $mform = null) {
 
     $wespher->roomname = str_replace(' ', '', $wespher->name);
 
+    $wespher->usersjoined = 0;
+
     $wespher->id = $DB->insert_record('wespher', $wespher);
     wespher_update_calendar($wespher, $cmid);
 

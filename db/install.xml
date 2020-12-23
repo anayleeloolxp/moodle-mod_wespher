@@ -18,6 +18,7 @@
         <FIELD NAME="completed" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="roomname" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Roomname of the Wespher activity"/>
         <FIELD NAME="recordedurl" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Recorded URL of the Wespher activity"/>
+        <FIELD NAME="usersjoined" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
 		  </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -59,6 +59,17 @@ wespher_view($wespher, $course, $cm, $context);
 echo $OUTPUT->header();
 echo $OUTPUT->heading($wespher->name);
 
+echo '<script>
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+  setCookie("vcusercounted", 0, 1);
+</script>
+';
+
 if (!has_capability('mod/wespher:view', $context)) {
     notice(get_string('nopermissiontoview', 'wespher'));
 }

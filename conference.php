@@ -128,11 +128,7 @@ echo "}\n";
 echo "var api = new WespherExternalAPI(domain, options);\n";
 echo "api.executeCommand('displayName', '" . $diplayname . "');\n";
 echo "api.executeCommand('toggleVideo');\n";
-echo "api.on('readyToClose', () => {
-    //var parts = api.getParticipantsInfo();
-    //console.log(parts);
-    console.log('opaaaaa');
-});\n";
+
 
 echo "api.on('videoConferenceJoined', () => {
     var max = ".$maxusers.";
@@ -143,6 +139,14 @@ echo "api.on('videoConferenceJoined', () => {
         document.getElementById('jitsiConferenceFrame0').style.display = 'none';
     }
 });\n";
+
+if (has_capability('moodle/course:manageactivities', $contextcourse)) {
+    echo "api.on('readyToClose', () => {
+        //var parts = api.getParticipantsInfo();
+        //console.log(parts);
+        console.log('opaaaaa');
+    });\n";
+}
 
 echo "</script>\n";
 

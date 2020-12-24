@@ -40,6 +40,7 @@ $string['join'] = 'Join';
 $string['calendarstart'] = 'The Leeloo LXP videoconference \'{$a}\' start';
 $string['allow'] = 'Start of Leeloo LXP videoconference';
 $string['conferenenotstarted'] = 'The videoconference has not started. You can join {$a} minutes before the start';
+$string['conferenenotstartedbyteacher'] = 'The videoconference has not started by teacher.</br> You can join after the teacher starts videoconference.';
 $string['server'] = 'Leeloo LXP Server';
 $string['serverexpl'] = 'Leeloo LXP Server url';
 $string['nopermissiontoview'] = 'You do not have permission to join this videoconference';
@@ -51,3 +52,4 @@ $string['nolicense'] = 'Invalid Leeloo LXP License ID';
 $string['license'] = 'Leeloo LXP License ID';
 
 $string['maxusers'] = 'Max Users Joined for videoconference';
+$string['maxconf'] = 'Maximum videoconference started. Please complete other videoconference to start new videoconference.';

@@ -26,6 +26,57 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
+require_once($CFG->libdir . '/filelib.php');
+$leeloolxplicense = get_config('mod_wespher')->license;
+$url = 'https://leeloolxp.com/api_moodle.php/?action=page_info';
+$postdata = '&license_key=' . $leeloolxplicense;
+
+$curl = new curl;
+
+$options = array(
+    'CURLOPT_RETURNTRANSFER' => true,
+    'CURLOPT_HEADER' => false,
+    'CURLOPT_POST' => 1,
+);
+
+if (!$output = $curl->post($url, $postdata, $options)) {
+    notice(get_string('nolicense', 'mod_wespher'));
+}
+
+$infoleeloolxp = json_decode($output);
+
+if ($infoleeloolxp->status != 'false') {
+    $leeloolxpurl = $infoleeloolxp->data->install_url;
+} else {
+    notice(get_string('nolicense', 'mod_wespher'));
+}
+
+$url = $leeloolxpurl . '/admin/Theme_setup/get_wespher_conference_settings';
+
+$postdata = '&license_key=' . $leeloolxplicense;
+
+$curl = new curl;
+
+$options = array(
+    'CURLOPT_RETURNTRANSFER' => true,
+    'CURLOPT_HEADER' => false,
+    'CURLOPT_POST' => 1,
+);
+
+if (!$output = $curl->post($url, $postdata, $options)) {
+    notice(get_string('nolicense', 'mod_wespher'));
+}
+
+$resposedata = json_decode($output);
+$settingleeloolxp = $resposedata->data->wespher_conference;
+$maxusers = $settingleeloolxp->maxusers;
+$maxconf = $settingleeloolxp->maxconf;
+
+$tablename = $CFG->prefix . 'wespher';
+$checksql = 'SELECT count(*) as activeconf FROM ' . $tablename . ' WHERE `completed`="2"';
+$wesphers = $DB->get_record_sql($checksql);
+$activeconf = $wesphers->activeconf;
+
 global $USER;
 
 $id = optional_param('id', 0, PARAM_INT);
@@ -59,44 +110,48 @@ wespher_view($wespher, $course, $cm, $context);
 echo $OUTPUT->header();
 echo $OUTPUT->heading($wespher->name);
 
-echo '<script>
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
-  setCookie("vcusercounted", 0, 1);
-</script>
-';
-
-if (!has_capability('mod/wespher:view', $context)) {
-    notice(get_string('nopermissiontoview', 'wespher'));
-}
-
-if ($wespher->intro) {
-    echo $OUTPUT->box(format_module_intro('wespher', $wespher, $cm->id), 'generalbox mod_introbox', 'wespherintro');
-}
-
-$urlparams = array('conferencename' => $wespher->name, 'courseid' => $course->id, 'cmid' => $id);
-
-$today = getdate();
-
-if ($wespher->completed == 1) {
-    $recordedurls = array_reverse(explode('|', $wespher->recordedurl));
-
-    foreach ($recordedurls as $recordedurl) {
-        if ($recordedurl != '') {
-            echo '<video width="100%" controls><source src="' . $recordedurl . '" type="video/mp4">Your browser does not support HTML5 video.</video>';
-        }
+if($activeconf > $maxconf){
+    notice(get_string('maxconf', 'wespher'));
+}else{
+    echo '<script>
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
+      setCookie("vcusercounted", 0, 1);
+    </script>
+    ';
+    
+    if (!has_capability('mod/wespher:view', $context)) {
+        notice(get_string('nopermissiontoview', 'wespher'));
     }
-} else if ($today[0] > (($wespher->timeopen) - ($wespher->beforetime * 60))) {
-
-    echo $OUTPUT->box(get_string('joinguide', 'wespher'));
-    echo $OUTPUT->single_button(new moodle_url('/mod/wespher/conference.php', $urlparams), get_string('join', 'wespher'), 'get');
-} else {
-
-    echo $OUTPUT->box(get_string('conferenenotstarted', 'wespher', $wespher->beforetime));
+    
+    if ($wespher->intro) {
+        echo $OUTPUT->box(format_module_intro('wespher', $wespher, $cm->id), 'generalbox mod_introbox', 'wespherintro');
+    }
+    
+    $urlparams = array('conferencename' => $wespher->name, 'courseid' => $course->id, 'cmid' => $id);
+    
+    $today = getdate();
+    
+    if ($wespher->completed == 1) {
+        $recordedurls = array_reverse(explode('|', $wespher->recordedurl));
+    
+        foreach ($recordedurls as $recordedurl) {
+            if ($recordedurl != '') {
+                echo '<video width="100%" controls><source src="' . $recordedurl . '" type="video/mp4">Your browser does not support HTML5 video.</video>';
+            }
+        }
+    } else if ( $wespher->completed == 2 ) {
+    
+        echo $OUTPUT->box(get_string('joinguide', 'wespher'));
+        echo $OUTPUT->single_button(new moodle_url('/mod/wespher/conference.php', $urlparams), get_string('join', 'wespher'), 'get');
+    } else {
+    
+        echo $OUTPUT->box(get_string('conferenenotstartedbyteacher', 'wespher'));
+    }
 }
 
 echo $OUTPUT->footer();

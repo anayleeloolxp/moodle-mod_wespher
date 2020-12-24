@@ -58,6 +58,7 @@ class mod_wespher_mod_form extends moodleform_mod {
 
         $choicescompleted = array(
             0 => 'Pending',
+            2 => 'Started',
             1 => 'Completed',
         );
         $mform->addElement('select', 'completed', get_string('completed', 'wespher'), $choicescompleted);

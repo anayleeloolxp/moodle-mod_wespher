@@ -33,7 +33,6 @@ $PAGE->set_context(context_system::Instance());
 $courseid = required_param('courseid', PARAM_INT);
 $moduleid = required_param('cmid', PARAM_INT);
 $context = context_module::instance($moduleid);
-$cm = get_coursemodule_from_id('wespher', $moduleid, 0, false, MUST_EXIST);
 
 global $USER;
 $diplayname = $USER->username;
@@ -92,70 +91,61 @@ $settingleeloolxp = $resposedata->data->wespher_conference;
 $maxusers = $settingleeloolxp->maxusers;
 $maxconf = $settingleeloolxp->maxconf;
 
-global $DB, $CFG;
-$tablename = $CFG->prefix . 'wespher';
+global $CFG;
 
-$checksql = 'SELECT usersjoined FROM ' . $tablename . ' WHERE `id`="' . $cm->instance . '"';
-$wesphers = $DB->get_record_sql($checksql);
-$usersjoined = $wesphers->usersjoined;
+$siteurl = $CFG->wwwroot;
+$siteurlencoded = str_ireplace('https://', 'https_', $siteurl);
+$siteurlencoded = str_ireplace('http://', 'http_', $siteurlencoded);
+$siteurlencoded = str_ireplace('/', '__', $siteurlencoded);
+$roomname = $siteurlencoded . '_____' . $conferencenmenospace;
 
-if($usersjoined >= $maxusers){
-    notice(get_string('maxusers', 'mod_wespher'));
-}else{
-    if( $_COOKIE['vcusercounted'] != 1 ) {
-        $sql = 'UPDATE ' . $tablename . ' SET usersjoined = usersjoined + 1 WHERE id = "' . $cm->instance . '"';
-        $DB->execute($sql);
 
-        echo '<script>
-        function setCookie(cname, cvalue, exdays) {
-            var d = new Date();
-            d.setTime(d.getTime() + (exdays*24*60*60*1000));
-            var expires = "expires="+ d.toUTCString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        }
-        setCookie("vcusercounted", 1, 1);
-        </script>
-        ';
-    }
-    
-    
-    
-    $siteurl = $CFG->wwwroot;
-    $siteurlencoded = str_ireplace('https://', 'https_', $siteurl);
-    $siteurlencoded = str_ireplace('http://', 'http_', $siteurlencoded);
-    $siteurlencoded = str_ireplace('/', '__', $siteurlencoded);
-    $roomname = $siteurlencoded . '_____' . $conferencenmenospace;
-    
-    
-    if (!has_capability('mod/wespher:view', $context)) {
-        notice(get_string('nopermissiontoview', 'wespher'));
-    }
-    echo "<div class='thirdpartynote'><b>Note</b>:- You need to Enable third party cookies to use the conference. Please make sure it's allowed in browser settings.</div>";
-    echo "<script src=\"https://" . $settingleeloolxp->wespher_domain . "/external_api.js\"></script>\n";
-    echo "<script>\n";
-    echo "var domain = \"" . $settingleeloolxp->wespher_domain . "\";\n";
-    echo "var options = {\n";
-    echo "roomName: \"" . $roomname . "\",\n";
-    
-    $contextcourse = context_course::instance($courseid);
-    if (has_capability('moodle/course:manageactivities', $contextcourse)) {
-        echo "jwt: \"teacher1\",\n";
-    }
-    
-    if ($CFG->branch < 36) {
-        echo "parentNode: document.querySelector('#region-main .card-body'),\n";
-    } else {
-        echo "parentNode: document.querySelector('#region-main'),\n";
-    }
-    
-    echo "width: '100%',\n";
-    echo "height: 650,\n";
-    echo "}\n";
-    echo "var api = new WespherExternalAPI(domain, options);\n";
-    echo "api.executeCommand('displayName', '" . $diplayname . "');\n";
-    echo "api.executeCommand('toggleVideo');\n";
-    echo "</script>\n";
+if (!has_capability('mod/wespher:view', $context)) {
+    notice(get_string('nopermissiontoview', 'wespher'));
 }
+echo "<div class='thirdpartynote'><b>Note</b>:- You need to Enable third party cookies to use the conference. Please make sure it's allowed in browser settings.</div>";
+echo "<div id='vc_notice' style='text-align: center;font-size: 30px;color: indianred;'></div>";
+echo "<script src=\"https://" . $settingleeloolxp->wespher_domain . "/external_api.js\"></script>\n";
+echo "<script>\n";
+echo "var domain = \"" . $settingleeloolxp->wespher_domain . "\";\n";
+echo "var options = {\n";
+echo "roomName: \"" . $roomname . "\",\n";
+
+$contextcourse = context_course::instance($courseid);
+if (has_capability('moodle/course:manageactivities', $contextcourse)) {
+    echo "jwt: \"teacher1\",\n";
+}
+
+if ($CFG->branch < 36) {
+    echo "parentNode: document.querySelector('#region-main .card-body'),\n";
+} else {
+    echo "parentNode: document.querySelector('#region-main'),\n";
+}
+
+echo "width: '100%',\n";
+echo "height: 650,\n";
+echo "}\n";
+echo "var api = new WespherExternalAPI(domain, options);\n";
+echo "api.executeCommand('displayName', '" . $diplayname . "');\n";
+echo "api.executeCommand('toggleVideo');\n";
+echo "api.on('readyToClose', () => {
+    //var parts = api.getParticipantsInfo();
+    //console.log(parts);
+    console.log('opaaaaa');
+});\n";
+
+echo "api.on('videoConferenceJoined', () => {
+    var max = ".$maxusers.";
+    var number = api.getNumberOfParticipants();
+    if(number > max){
+        api.executeCommand('hangup');
+        document.getElementById('vc_notice').innerHTML = '".get_string('maxusers', 'mod_wespher')."';
+        document.getElementById('jitsiConferenceFrame0').style.display = 'none';
+    }
+});\n";
+
+echo "</script>\n";
+
 
 
 

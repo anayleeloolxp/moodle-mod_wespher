@@ -51,5 +51,5 @@ $string['recordedurl'] = 'If completed URL of recording';
 $string['nolicense'] = 'Invalid Leeloo LXP License ID';
 $string['license'] = 'Leeloo LXP License ID';
 
-$string['maxusers'] = 'Max Users Joined for videoconference';
+$string['maxusers'] = 'Sorry, Maximum Users Joined for videoconference. Please contact administrator.';
 $string['maxconf'] = 'Maximum videoconference started. Please complete other videoconference to start new videoconference.';

@@ -136,18 +136,27 @@ echo "api.on('videoConferenceJoined', () => {
     if(number > max){
         api.executeCommand('hangup');
         document.getElementById('vc_notice').innerHTML = '".get_string('maxusers', 'mod_wespher')."';
-        document.getElementById('jitsiConferenceFrame0').style.display = 'none';
     }
 });\n";
 
 if (has_capability('moodle/course:manageactivities', $contextcourse)) {
-    echo "api.on('readyToClose', () => {
+    /* echo "api.on('readyToClose', () => {
         //var parts = api.getParticipantsInfo();
         //console.log(parts);
-        console.log('opaaaaa');
+        //console.log('opaaaaa');
+    });\n"; */
+}else{
+    echo "api.on('participantRoleChanged', (data) => {
+        //console.log('participantRoleChanged');
+        //console.log(data);
+        if( data.role == 'moderator' ){
+            document.getElementById('vc_notice').innerHTML = '".get_string('noteacherinroom', 'mod_wespher')."';
+            api.executeCommand('hangup');
+        }
     });\n";
 }
 
+//echo "document.addEventListener('contextmenu', event => event.preventDefault());\n";
 echo "</script>\n";
 
 

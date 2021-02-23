@@ -29,14 +29,16 @@ require_once(dirname(__FILE__) . '/lib.php');
 require_once($CFG->libdir . '/filelib.php');
 $leeloolxplicense = get_config('mod_wespher')->license;
 $url = 'https://leeloolxp.com/api_moodle.php/?action=page_info';
-$postdata = '&license_key=' . $leeloolxplicense;
+$postdata = [
+    'license_key' => $leeloolxplicense,
+];
 
 $curl = new curl;
 
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => 1,
+    'CURLOPT_POST' => count($postdata),
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {
@@ -53,14 +55,16 @@ if ($infoleeloolxp->status != 'false') {
 
 $url = $leeloolxpurl . '/admin/Theme_setup/get_wespher_conference_settings';
 
-$postdata = '&license_key=' . $leeloolxplicense;
+$postdata = [
+    'license_key' => $leeloolxplicense,
+];
 
 $curl = new curl;
 
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => 1,
+    'CURLOPT_POST' => count($postdata),
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {
@@ -110,35 +114,34 @@ wespher_view($wespher, $course, $cm, $context);
 echo $OUTPUT->header();
 echo $OUTPUT->heading($wespher->name);
 
-if($activeconf > $maxconf){
+if ($activeconf > $maxconf) {
     notice(get_string('maxconf', 'wespher'));
-}else{
+} else {
     if (!has_capability('mod/wespher:view', $context)) {
         notice(get_string('nopermissiontoview', 'wespher'));
     }
-    
+
     if ($wespher->intro) {
         echo $OUTPUT->box(format_module_intro('wespher', $wespher, $cm->id), 'generalbox mod_introbox', 'wespherintro');
     }
-    
+
     $urlparams = array('conferencename' => $wespher->name, 'courseid' => $course->id, 'cmid' => $id);
-    
+
     $today = getdate();
-    
+
     if ($wespher->completed == 1) {
         $recordedurls = array_reverse(explode('|', $wespher->recordedurl));
-    
+
         foreach ($recordedurls as $recordedurl) {
             if ($recordedurl != '') {
                 echo '<video width="100%" controls><source src="' . $recordedurl . '" type="video/mp4">Your browser does not support HTML5 video.</video>';
             }
         }
-    } else if ( $wespher->completed == 2 ) {
-    
+    } else if ($wespher->completed == 2) {
         echo $OUTPUT->box(get_string('joinguide', 'wespher'));
         echo $OUTPUT->single_button(new moodle_url('/mod/wespher/conference.php', $urlparams), get_string('join', 'wespher'), 'get');
     } else {
-    
+
         echo $OUTPUT->box(get_string('conferenenotstartedbyteacher', 'wespher'));
     }
 }

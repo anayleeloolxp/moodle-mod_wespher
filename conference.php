@@ -47,14 +47,16 @@ echo $OUTPUT->header();
 
 $leeloolxplicense = get_config('mod_wespher')->license;
 $url = 'https://leeloolxp.com/api_moodle.php/?action=page_info';
-$postdata = '&license_key=' . $leeloolxplicense;
+$postdata = [
+    'license_key' => $leeloolxplicense,
+];
 
 $curl = new curl;
 
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => 1,
+    'CURLOPT_POST' => count($postdata),
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {
@@ -71,14 +73,16 @@ if ($infoleeloolxp->status != 'false') {
 
 $url = $leeloolxpurl . '/admin/Theme_setup/get_wespher_conference_settings';
 
-$postdata = '&license_key=' . $leeloolxplicense;
+$postdata = [
+    'license_key' => $leeloolxplicense,
+];
 
 $curl = new curl;
 
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => 1,
+    'CURLOPT_POST' => count($postdata),
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {
@@ -98,7 +102,6 @@ $siteurlencoded = str_ireplace('https://', 'https_', $siteurl);
 $siteurlencoded = str_ireplace('http://', 'http_', $siteurlencoded);
 $siteurlencoded = str_ireplace('/', '__', $siteurlencoded);
 $roomname = $siteurlencoded . '_____' . $conferencenmenospace;
-
 
 if (!has_capability('mod/wespher:view', $context)) {
     notice(get_string('nopermissiontoview', 'wespher'));
@@ -129,37 +132,28 @@ echo "var api = new WespherExternalAPI(domain, options);\n";
 echo "api.executeCommand('displayName', '" . $diplayname . "');\n";
 echo "api.executeCommand('toggleVideo');\n";
 
-
 echo "api.on('videoConferenceJoined', () => {
-    var max = ".$maxusers.";
+    var max = " . $maxusers . ";
     var number = api.getNumberOfParticipants();
     if(number > max){
         api.executeCommand('hangup');
-        document.getElementById('vc_notice').innerHTML = '".get_string('maxusers', 'mod_wespher')."';
+        document.getElementById('vc_notice').innerHTML = '" . get_string('maxusers', 'mod_wespher') . "';
     }
 });\n";
 
 if (has_capability('moodle/course:manageactivities', $contextcourse)) {
-    /* echo "api.on('readyToClose', () => {
-        //var parts = api.getParticipantsInfo();
-        //console.log(parts);
-        //console.log('opaaaaa');
-    });\n"; */
-}else{
+    $falsevar = 0;
+} else {
     echo "api.on('participantRoleChanged', (data) => {
         //console.log('participantRoleChanged');
         //console.log(data);
         if( data.role == 'moderator' ){
-            document.getElementById('vc_notice').innerHTML = '".get_string('noteacherinroom', 'mod_wespher')."';
+            document.getElementById('vc_notice').innerHTML = '" . get_string('noteacherinroom', 'mod_wespher') . "';
             api.executeCommand('hangup');
         }
     });\n";
 }
 
-//echo "document.addEventListener('contextmenu', event => event.preventDefault());\n";
 echo "</script>\n";
-
-
-
 
 echo $OUTPUT->footer();

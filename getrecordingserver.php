@@ -43,14 +43,16 @@ function encrption_data($textoencrypt) {
 
 $leeloolxplicense = get_config('mod_wespher')->license;
 $url = 'https://leeloolxp.com/api_moodle.php/?action=page_info';
-$postdata = '&license_key=' . $leeloolxplicense;
+$postdata = [
+    'license_key' => $leeloolxplicense,
+];
 
 $curl = new curl;
 
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => 1,
+    'CURLOPT_POST' => count($postdata),
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {
@@ -67,14 +69,16 @@ if ($infoleeloolxp->status != 'false') {
 
 $url = $leeloolxpurl . '/admin/Theme_setup/get_wespher_conference_settings';
 
-$postdata = '&license_key=' . $leeloolxplicense;
+$postdata = [
+    'license_key' => $leeloolxplicense,
+];
 
 $curl = new curl;
 
 $options = array(
     'CURLOPT_RETURNTRANSFER' => true,
     'CURLOPT_HEADER' => false,
-    'CURLOPT_POST' => 1,
+    'CURLOPT_POST' => count($postdata),
 );
 
 if (!$output = $curl->post($url, $postdata, $options)) {

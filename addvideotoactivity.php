@@ -98,16 +98,14 @@ $ftpuserpass = $settingleeloolxp->recording_ftp_password;
 $recordingftppath = $settingleeloolxp->recording_ftp_path;
 $recordingbaseurl = $settingleeloolxp->recording_base_url;
 
-$meetingname = deencrption_data($_POST['meeting_name']);
-$recordingpath = deencrption_data($_POST['recording_path']);
-$videoname = deencrption_data($_POST['video_name']);
-$videourl = deencrption_data($_POST['videourl']);
-$recordingurlbase = deencrption_data($_POST['recording_url_base']);
+$meetingname = deencrption_data(optional_param('meeting_name', 0, PARAM_RAW));
+$recordingpath = deencrption_data(optional_param('recording_path', 0, PARAM_RAW));
+$videoname = deencrption_data(optional_param('video_name', 0, PARAM_RAW));
+$videourl = deencrption_data(optional_param('videourl', 0, PARAM_RAW));
+$recordingurlbase = deencrption_data(optional_param('recording_url_base', 0, PARAM_RAW));
 
-$tablename = $CFG->prefix . 'wespher';
-
-$checksql = 'SELECT * FROM ' . $tablename . ' WHERE `roomname`="' . $meetingname . '"';
-$wesphers = $DB->get_record_sql($checksql);
+$checksql = 'SELECT * FROM {wespher} WHERE `roomname`= ?';
+$wesphers = $DB->get_record_sql($checksql, [$meetingname]);
 
 $result = array();
 
@@ -116,12 +114,12 @@ if ($wesphers) {
         $result['old'] = $wesphers->recordedurl;
         $result['new'] = $recordingpath . '/' . $videoname;
         $recordingurlbase = str_ireplace('/recordings/', '', $recordingurlbase);
-        $sql = 'UPDATE ' . $tablename . ' SET recordedurl = "' . $recordingurlbase . '/' . 'output.mp4" WHERE roomname = "' . $meetingname . '"';
-        $DB->execute($sql);
+        $sql = 'UPDATE {wespher} SET recordedurl = ? WHERE roomname = ?';
+        $DB->execute($sql, [$recordingurlbase.'/'.'output.mp4', $meetingname]);
     } else {
 
-        $sql = 'UPDATE ' . $tablename . ' SET recordedurl = "' . $videourl . '" WHERE roomname = "' . $meetingname . '"';
-        $DB->execute($sql);
+        $sql = 'UPDATE {wespher} SET recordedurl = ? WHERE roomname = ?';
+        $DB->execute($sql, [$videourl, $meetingname]);
     }
 }
 

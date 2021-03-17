@@ -27,6 +27,40 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
 require_once($CFG->libdir . '/filelib.php');
+
+global $USER;
+
+$id = optional_param('id', 0, PARAM_INT);
+$n = optional_param('n', 0, PARAM_INT);
+
+if ($id) {
+    $cm = get_coursemodule_from_id('wespher', $id, 0, false, MUST_EXIST);
+    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+    $wespher = $DB->get_record('wespher', array('id' => $cm->instance), '*', MUST_EXIST);
+} else if ($n) {
+    $wespher = $DB->get_record('wespher', array('id' => $n), '*', MUST_EXIST);
+    $course = $DB->get_record('course', array('id' => $wespher->course), '*', MUST_EXIST);
+    $cm = get_coursemodule_from_instance('wespher', $wespher->id, $course->id, false, MUST_EXIST);
+} else {
+
+    print_error('missingparam');
+}
+
+require_login($course, true, $cm);
+
+// Completion and trigger events.
+
+$PAGE->set_url('/mod/wespher/view.php', array('id' => $cm->id));
+$PAGE->set_title(format_string($wespher->name));
+$PAGE->set_heading(format_string($course->fullname));
+
+$context = context_module::instance($cm->id);
+
+wespher_view($wespher, $course, $cm, $context);
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading($wespher->name);
+
 $leeloolxplicense = get_config('mod_wespher')->license;
 $url = 'https://leeloolxp.com/api_moodle.php/?action=page_info';
 $postdata = [
@@ -79,39 +113,6 @@ $maxconf = $settingleeloolxp->maxconf;
 $checksql = 'SELECT count(*) as activeconf FROM {wespher} WHERE `completed`= ?';
 $wesphers = $DB->get_record_sql($checksql, [2]);
 $activeconf = $wesphers->activeconf;
-
-global $USER;
-
-$id = optional_param('id', 0, PARAM_INT);
-$n = optional_param('n', 0, PARAM_INT);
-
-if ($id) {
-    $cm = get_coursemodule_from_id('wespher', $id, 0, false, MUST_EXIST);
-    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $wespher = $DB->get_record('wespher', array('id' => $cm->instance), '*', MUST_EXIST);
-} else if ($n) {
-    $wespher = $DB->get_record('wespher', array('id' => $n), '*', MUST_EXIST);
-    $course = $DB->get_record('course', array('id' => $wespher->course), '*', MUST_EXIST);
-    $cm = get_coursemodule_from_instance('wespher', $wespher->id, $course->id, false, MUST_EXIST);
-} else {
-
-    print_error('missingparam');
-}
-
-require_login($course, true, $cm);
-
-// Completion and trigger events.
-
-$PAGE->set_url('/mod/wespher/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($wespher->name));
-$PAGE->set_heading(format_string($course->fullname));
-
-$context = context_module::instance($cm->id);
-
-wespher_view($wespher, $course, $cm, $context);
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading($wespher->name);
 
 if ($activeconf > $maxconf) {
     notice(get_string('maxconf', 'wespher'));

@@ -82,7 +82,6 @@ class restore_wespher_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * 
      * @return array data
      */
     static public function define_restore_log_rules() {
@@ -97,7 +96,6 @@ class restore_wespher_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * 
      * @return array data
      */
     static public function define_restore_log_rules_for_course() {

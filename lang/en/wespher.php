@@ -54,5 +54,7 @@ $string['license'] = 'Leeloo LXP License ID';
 $string['maxusers'] = 'Sorry, Maximum Users Joined for videoconference. Please contact administrator.';
 $string['maxconf'] = 'Maximum videoconference started. Please complete other videoconference to start new videoconference.';
 $string['noteacherinroom'] = 'You cannot access videoconference as no teacher is over there.';
+$string['nowespherdefined'] = 'Please check wesher settings in Leeloo LXP.';
+$string['note'] = "Note</b>:- You need to Enable third party cookies to use the conference. Please make sure it's allowed in browser settings.";
 
 $string['privacy:metadata'] = 'The Leeloo LXP videoconferences plugin only shows information and does not store user data.';

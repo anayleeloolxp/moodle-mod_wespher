@@ -92,6 +92,10 @@ if (!$output = $curl->post($url, $postdata, $options)) {
 $resposedata = json_decode($output);
 $settingleeloolxp = $resposedata->data->wespher_conference;
 
+if (!isset($settingleeloolxp->wespher_domain)) {
+    notice(get_string('nowespherdefined', 'mod_wespher'));
+}
+
 $maxusers = $settingleeloolxp->maxusers;
 $maxconf = $settingleeloolxp->maxconf;
 
@@ -103,10 +107,12 @@ $siteurlencoded = str_ireplace('http://', 'http_', $siteurlencoded);
 $siteurlencoded = str_ireplace('/', '__', $siteurlencoded);
 $roomname = $siteurlencoded . '_____' . $conferencenmenospace;
 
+$roomname = ($leeloolxplicense . '_____' . $conferencenmenospace);
+
 if (!has_capability('mod/wespher:view', $context)) {
     notice(get_string('nopermissiontoview', 'wespher'));
 }
-echo "<div class='thirdpartynote'><b>Note</b>:- You need to Enable third party cookies to use the conference. Please make sure it's allowed in browser settings.</div>";
+echo "<div class='thirdpartynote'><b>".get_string('note', 'wespher')."</div>";
 echo "<div id='vc_notice' style='text-align: center;font-size: 30px;color: indianred;'></div>";
 echo "<script src=\"https://" . $settingleeloolxp->wespher_domain . "/external_api.js\"></script>\n";
 echo "<script>\n";

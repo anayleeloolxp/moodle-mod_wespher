@@ -23,7 +23,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once ($CFG->libdir . "/externallib.php");
+defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->libdir . "/externallib.php");
+
+/**
+ * The external api class
+ *
+ */
 
 class mod_wespher_external extends external_api {
 
@@ -45,13 +52,20 @@ class mod_wespher_external extends external_api {
 
     /**
      * Update Recording of Wespher Instance
+     * 
+     * @param string $reqmeetingname The meeting name
+     * @param string $reqrecordingpath The recording path
+     * @param string $reqvideoname The video name
+     * @param string $reqvideourl The video url
+     * @param string $reqrecordingurlbase The recording base url
+     * 
      * @return string welcome message
      */
-    public static function update_recording($reqmeetingname = '',$reqrecordingpath = '',$reqvideoname = '',$reqvideourl = '',$reqrecordingurlbase = '') {
+    public static function update_recording($reqmeetingname = '', $reqrecordingpath = '', $reqvideoname = '', $reqvideourl = '', $reqrecordingurlbase = '') {
 
         global $DB;
-        //Parameter validation
-        //REQUIRED
+        // Parameter validation
+        // REQUIRED
         $params = self::validate_parameters(
             self::update_recording_parameters(),
             array(

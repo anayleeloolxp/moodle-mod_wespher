@@ -138,7 +138,7 @@ if ($activeconf > $maxconf) {
             }
         }
     } else if ($wespher->completed == 2) {
-        echo $OUTPUT->box(get_string('joinguide', 'wespher'));
+        echo $OUTPUT->box(get_string('joininfo', 'wespher'));
         echo $OUTPUT->single_button(new moodle_url('/mod/wespher/conference.php', $urlparams), get_string('join', 'wespher'), 'get');
     } else {
 

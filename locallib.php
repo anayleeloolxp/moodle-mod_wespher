@@ -45,7 +45,7 @@ function wespher_update_calendar($wespher, $cmid) {
         array('modulename' => 'wespher', 'instance' => $wespher->id,
             'eventtype' => $event->eventtype))) {
         if ((!empty($wespher->timeopen)) && ($wespher->timeopen > 0)) {
-            $event->name = get_string('calendarstart', 'wespher', $wespher->name);
+            $event->name = get_string('wespherstart', 'wespher', $wespher->name);
             $event->timestart = $wespher->timeopen;
             $event->timesort = $wespher->timeopen;
             $event->visible = instance_is_visible('wespher', $wespher);
@@ -59,7 +59,7 @@ function wespher_update_calendar($wespher, $cmid) {
         }
     } else {
         if ((!empty($wespher->timeopen)) && ($wespher->timeopen > 0)) {
-            $event->name = get_string('calendarstart', 'wespher', $wespher->name);
+            $event->name = get_string('wespherstart', 'wespher', $wespher->name);
             $event->courseid = $wespher->course;
             $event->groupid = 0;
             $event->userid = 0;

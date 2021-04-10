@@ -32,45 +32,45 @@ $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 
 require_course_login($course);
 
-$strname = get_string('modulenameplural', 'mod_wespher');
+$wesname = get_string('modulenameplural', 'mod_wespher');
 $PAGE->set_url('/mod/wespher/index.php', array('id' => $id));
-$PAGE->navbar->add($strname);
-$PAGE->set_title("$course->shortname: $strname");
+$PAGE->navbar->add($wesname);
+$PAGE->set_title("$course->shortname: $wesname");
 $PAGE->set_heading($course->fullname);
 $PAGE->set_pagelayout('incourse');
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($strname);
+echo $OUTPUT->heading($wesname);
 
 if (!$wesphers = get_all_instances_in_course('wespher', $course)) {
     notice(get_string('nowesphers', 'wespher'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
-$usesections = course_format_uses_sections($course->format);
+$coursesections = course_format_uses_sections($course->format);
 
-$htmltable = new html_table();
-$htmltable->attributes['class'] = 'generaltable mod_index';
+$table = new html_table();
+$table->attributes['class'] = 'generaltable mod_index';
 
-if ($usesections) {
+if ($coursesections) {
     $strsectionname = get_string('sectionname', 'format_' . $course->format);
-    $htmltable->head = array($strsectionname, $strname);
-    $htmltable->align = array('center', 'left');
+    $table->head = array($strsectionname, $wesname);
+    $table->align = array('center', 'left');
 } else {
-    $htmltable->head = array($strname);
-    $htmltable->align = array('left');
+    $table->head = array($wesname);
+    $table->align = array('left');
 }
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
 foreach ($modinfo->instances['wespher'] as $cm) {
     $row = array();
-    if ($usesections) {
+    if ($coursesections) {
         if ($cm->sectionnum !== $currentsection) {
             if ($cm->sectionnum) {
                 $row[] = get_section_name($course, $cm->sectionnum);
             }
             if ($currentsection !== '') {
-                $htmltable->data[] = 'hr';
+                $table->data[] = 'hr';
             }
             $currentsection = $cm->sectionnum;
         }
@@ -80,9 +80,9 @@ foreach ($modinfo->instances['wespher'] as $cm) {
 
     $row[] = html_writer::link(new moodle_url('view.php', array('id' => $cm->id)), $cm->get_formatted_name(), $class);
 
-    $htmltable->data[] = $row;
+    $table->data[] = $row;
 }
 
-echo html_writer::table($htmltable);
+echo html_writer::table($table);
 
 echo $OUTPUT->footer();
